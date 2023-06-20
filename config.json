@@ -1,0 +1,27 @@
+{
+    "emulators_folder_path": "emulators",
+    "emulators": {
+        "snes9x": {
+            "name": "Super Nintendo Entertainment System (Snes)",
+            "download_link": "https://github.com/snes9xgit/snes9x/releases/download/1.62.3/snes9x-1.62.3-win32-x64.zip",
+            "extract": true,
+            "executable_name": "snes9x-x64.exe",
+            "file_types": [
+                "smc",
+                "sfc"
+            ]
+        },
+        "visual_boy_advance": {
+            "name": "Visual Boy Advance",
+            "download_link": "https://github.com/visualboyadvance-m/visualboyadvance-m/releases/download/v2.1.5/visualboyadvance-m-Win-x86_64.zip",
+            "extract": true,
+            "executable_name": "visualboyadvance-m.exe",
+            "file_types": [
+                "gb",
+                "gba",
+                "gbc"
+            ]
+        }
+    },
+    "rom_folder_path": "roms"
+}
