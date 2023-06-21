@@ -1,5 +1,6 @@
 from enum import Enum
 import os
+import re
 from typing import List
 from flask import request
 import requests
@@ -65,6 +66,7 @@ class VimmsLairRom:
 
         ext = r.headers['content-type'].split('/')[-1]
         output_file = self._name + "." + ext
+        print(r.headers['content-type'])
         output_path = os.path.join(output_folder, output_file)
         with open(output_path, 'wb+') as f:
             f.write(r.content)
@@ -95,15 +97,19 @@ class VimmsLairSearchAPI:
         base_url: str = "https://vimm.net/vault/?"
         terms: str = f"mode=adv&p=list&system={emulator.value}&q={term}&players=%3E%3D&playersValue=1&simultaneous=&publisher=&year=%3D&yearValue=&cart=%3D&cartValue=&rating=%3E%3D&ratingValue=&region={region.value}&sort=Title&sortOrder=ASC"
         full_url: str = base_url + terms
-
         r = requests.get(full_url)
         html = r.text
 
         soup = BeautifulSoup(html, 'html.parser')
         full_rom_table_element = soup.find("table", {"class": "rounded centered cellpadding1 hovertable striped"})
+        if full_rom_table_element is None:
+            return []
 
         # Find header order
-        header_elements = full_rom_table_element.find('table', {"class": "cellpadding1"}).find_all("td")
+        header_elements = full_rom_table_element.find('table', {"class": "cellpadding1"})
+        if header_elements is None:
+            return []
+        header_elements = header_elements.find_all("td")
         headers = {header_element.text.lower(): index for index, header_element in enumerate(header_elements)}
 
         # Find rom elements
@@ -115,7 +121,7 @@ class VimmsLairSearchAPI:
             td_elements = rom_element.find_all('td')
 
             link = td_elements[headers['title']].find('a', href=True)
-            name = link.text
+            name = re.sub(r'[^\w\d-]', '_', link.text)
             id = link['href'].split("/")[2]
 
             rom = VimmsLairRom(name, id, region, emulator)
@@ -124,7 +130,7 @@ class VimmsLairSearchAPI:
 
 
 if __name__ == "__main__":
-    roms = VimmsLairSearchAPI.search_roms(VimmsLairRegion.ALL, VimmsLairEmulator.SNES, 'super mario world')
+    roms = VimmsLairSearchAPI.search_roms(VimmsLairRegion.ALL, VimmsLairEmulator.NINTENDO_64, 'super mario 64')
     print(roms[0])
     roms[0].download('roms')
-    print(VimmsLairEmulator.GAME_BOY.name)
+    print(VimmsLairEmulator.NINTENDO_64.name)

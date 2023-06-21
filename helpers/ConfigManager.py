@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Dict, List
 
 
@@ -8,6 +9,12 @@ class ConfigManager:
     loaded_config_once = False
     extensions_per_emulator: Dict[str, str] = None
     loaded_extensions_per_emulator_once = False
+
+    @staticmethod
+    def get_emulator_executable_path(emulator) -> str:
+        config: dict = ConfigManager.get_config()
+        emulator_executable_path = os.path.join(config['emulators_folder_path'], emulator, config['emulators'][emulator]['executable_name'])
+        return emulator_executable_path
 
     @staticmethod
     def load_emulator_extension_map() -> None:

@@ -2,24 +2,98 @@
     "emulators_folder_path": "emulators",
     "emulators": {
         "snes9x": {
-            "name": "Super Nintendo Entertainment System (Snes)",
+            "name": "Super Nintendo Entertainment System (SNES)",
             "download_link": "https://github.com/snes9xgit/snes9x/releases/download/1.62.3/snes9x-1.62.3-win32-x64.zip",
+            "extension": "zip",
             "extract": true,
             "executable_name": "snes9x-x64.exe",
             "file_types": [
                 "smc",
                 "sfc"
+            ],
+            "needs_to_open_once": false,
+            "full_screen_hotkey_configurations": [
+                {
+                    "type": "hold",
+                    "key": "altleft"
+                },
+                {
+                    "type": "press",
+                    "key": "enter"
+                }
             ]
         },
         "visual_boy_advance": {
             "name": "Visual Boy Advance",
             "download_link": "https://github.com/visualboyadvance-m/visualboyadvance-m/releases/download/v2.1.5/visualboyadvance-m-Win-x86_64.zip",
+            "extension": "zip",
             "extract": true,
             "executable_name": "visualboyadvance-m.exe",
             "file_types": [
                 "gb",
                 "gba",
                 "gbc"
+            ],
+            "needs_to_open_once": false,
+            "full_screen_hotkey_configurations": [
+                {
+                    "type": "hold",
+                    "key": "altleft"
+                },
+                {
+                    "type": "press",
+                    "key": "enter"
+                }
+            ]
+        },
+        "nes": {
+            "name": "Nintendo Entertainment System (NES)",
+            "download_link": "https://nav.dl.sourceforge.net/project/nestopiaue/1.52/nestopia_1.52.0-win32.zip",
+            "extension": "zip",
+            "extract": true,
+            "executable_name": "nestopia.exe",
+            "file_types": [
+                "nes"
+            ],
+            "needs_to_open_once": false,
+            "full_screen_hotkey_configurations": [
+                {
+                    "type": "hold",
+                    "key": "altleft"
+                },
+                {
+                    "type": "press",
+                    "key": "enter"
+                }
+            ]
+        },
+        "n64": {
+            "name": "Nintendo 64",
+            "download_link": "https://www.pj64-emu.com/file/project64-3-0-0-5632-f83bee9/",
+            "extension": "zip",
+            "extract": true,
+            "executable_name": "Project64.exe",
+            "file_types": [
+                "n64",
+                "v64",
+                "z64"
+            ],
+            "needs_to_open_once": true,
+            "initialize_hotkeys": [
+                {
+                    "type": "press",
+                    "key": "enter"
+                }
+            ],
+            "full_screen_hotkey_configurations": [
+                {
+                    "type": "hold",
+                    "key": "altleft"
+                },
+                {
+                    "type": "press",
+                    "key": "enter"
+                }
             ]
         }
     },
