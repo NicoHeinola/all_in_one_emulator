@@ -1,6 +1,5 @@
 from enum import Enum
 from typing import List
-
 from pygame import Surface
 
 
@@ -20,6 +19,8 @@ class Drawable:
         self._draw_x: int = x
         self._draw_y: int = y
 
+        self._aspect_ratio: int = 0
+
         self._draw_x = self._x
         self._draw_y = self._y
 
@@ -32,6 +33,11 @@ class Drawable:
 
         self.recalculate_position()
 
+    def set_aspect_ratio(self, ratio: int) -> None:
+        self._aspect_ratio = ratio
+        self.set_width(self._width)
+        self.set_height(self._height)
+
     def set_position_type(self, position_type: PositionType):
         self._position_type = position_type
         self.recalculate_position()
@@ -40,14 +46,21 @@ class Drawable:
         self._parent = parent
         self.recalculate_position()
 
+    def remove_component(self, component):
+        self._components.remove(component)
+
     def add_component(self, component):
         component.set_parent(self)
         self._components.append(component)
 
     def set_width(self, width: float) -> None:
+        if width == 0:
+            width = self.get_height() * self._aspect_ratio
         self._width = width
 
     def set_height(self, height: float) -> None:
+        if height == 0 and self._aspect_ratio != 0:
+            height = self.get_width() / self._aspect_ratio
         self._height = height
 
     def get_width(self) -> float:
@@ -75,10 +88,13 @@ class Drawable:
         self.recalculate_y()
 
     def recalculate_x(self) -> None:
+        # Relative is default
         x = self.get_x()
-        if self._position_type == PositionType.RELATIVE:
-            if self._parent is not None:
-                x += self._parent.get_x()
+        if self._parent is not None:
+            x += self._parent.get_x()
+
+        if self._position_type == PositionType.ABSOLUTE:
+            x = self.get_x()
         elif self._position_type == PositionType.HORIZONTAL_CENTER or self._position_type == PositionType.CENTER:
             if self._parent is not None:
                 parent_x = self._parent.get_x()
@@ -87,11 +103,17 @@ class Drawable:
                 x = Drawable.get_center(parent_x, width, parent_width)
         self._draw_x = x
 
+        for component in self._components:
+            component.recalculate_x()
+
     def recalculate_y(self) -> None:
+        # Relative is default
         y = self.get_y()
-        if self._position_type == PositionType.RELATIVE:
-            if self._parent is not None:
-                y += self._parent.get_y()
+        if self._parent is not None:
+            y += self._parent.get_y()
+
+        if self._position_type == PositionType.ABSOLUTE:
+            y = self.get_y()
         elif self._position_type == PositionType.VERTICAL_CENTER or self._position_type == PositionType.CENTER:
             if self._parent is not None:
                 parent_y = self._parent.get_y()
@@ -99,6 +121,9 @@ class Drawable:
                 height = self.get_height()
                 y = Drawable.get_center(parent_y, height, parent_height)
         self._draw_y = y
+
+        for component in self._components:
+            component.recalculate_y()
 
     def draw(self) -> None:
         for component in self._components:

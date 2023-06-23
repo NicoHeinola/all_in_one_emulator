@@ -5,6 +5,7 @@ from components.List import List
 from components.CardItem import CardItem
 from components.Drawable import Drawable
 from components.Drawable import PositionType
+from components.Image import Image
 
 
 class TestScene(Scene):
@@ -27,6 +28,8 @@ class TestScene(Scene):
         carditem = CardItem(window, 300, 400)
         carditem.set_color(153, 225, 235)
         carditem.set_position_type(PositionType.CENTER)
+        carditem.load_image('images/icons/game-controller.png')
+
         frame.add_component(carditem)
 
     def draw(self) -> None:
