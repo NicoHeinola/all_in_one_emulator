@@ -1,7 +1,7 @@
 from typing import List
 
 from pygame import Surface
-from components.Drawable import Drawable
+from ui.components.Drawable import Drawable
 
 
 class Scene:
@@ -17,6 +17,12 @@ class Scene:
 
     def _empty_elements(self) -> None:
         self._elements = []
+
+    def joystick_key_down(self, key_code) -> None:
+        pass
+
+    def keyboard_key_down(self, key_code) -> None:
+        pass
 
     def draw(self) -> None:
         for element in self._elements:

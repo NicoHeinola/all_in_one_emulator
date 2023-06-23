@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from scenes.Scene import Scene
+from ui.scenes.Scene import Scene
 
 
 class SceneLoader:

@@ -97,5 +97,34 @@
             ]
         }
     },
-    "rom_folder_path": "roms"
+    "rom_folder_path": "roms",
+    "keybinds": {
+        "right": {
+            "controller": [
+                15
+            ],
+            "keyboard": [
+                1073741903,
+                100
+            ]
+        },
+        "left": {
+            "controller": [
+                14
+            ],
+            "keyboard": [
+                1073741904,
+                97
+            ]
+        },
+        "activate": {
+            "controller": [
+                0
+            ],
+            "keyboard": [
+                32,
+                13
+            ]
+        }
+    }
 }

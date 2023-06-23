@@ -1,8 +1,8 @@
 from enum import Enum
 from typing import List
 from pygame import Surface
-from components.Drawable import Drawable
-from components.Drawable import PositionType
+from ui.components.Drawable import Drawable
+from ui.components.Drawable import PositionType
 
 
 class ForceHorizontalLayout(Enum):

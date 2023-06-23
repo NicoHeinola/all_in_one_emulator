@@ -1,9 +1,9 @@
 # Load and initialize Modules here
+from ui.pre_made_scenes.MainMenu import MainMenu
+from ui.scenes.SceneLoader import SceneLoader
 from typing import List
 import pygame
-
-from scenes.SceneLoader import SceneLoader
-from pre_made_scenes.MainMenu import MainMenu
+pygame.joystick.init()
 pygame.init()
 pygame.font.init()  # you have to call this at the start,
 
@@ -36,16 +36,25 @@ class MainUI(SceneLoader):
 
         self.build_scenes()
 
+        for joystick_index in range(pygame.joystick.get_count()):
+            joystick = pygame.joystick.Joystick(joystick_index)  # Get the first joystick
+            joystick.init()
+            print("Joystick detected:", joystick.get_name())
+
         while stopped == False:
             scene = self.get_active_scene()
-            # Event Tasking
-            # Add all your event tasking things here
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
                 elif event.type == pygame.KEYDOWN:
-                    stopped = True
+                    print("KEYDOWN:", event.key, pygame.key.name(event.key))
+                    scene.keyboard_key_down(event.key)
+                elif event.type == pygame.JOYBUTTONDOWN:
+                    button = event.button
+                    print("JOYSTICK BUTTON DOWN:", button)
+                    scene.joystick_key_down(button)
                 elif event.type == pygame.WINDOWRESIZED:
                     self.build_scenes()
 

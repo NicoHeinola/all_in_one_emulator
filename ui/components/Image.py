@@ -1,6 +1,6 @@
 from pygame import Surface
 import pygame
-from components.Drawable import Drawable
+from ui.components.Drawable import Drawable
 
 
 class Image(Drawable):

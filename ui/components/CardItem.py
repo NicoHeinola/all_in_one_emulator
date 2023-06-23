@@ -1,10 +1,10 @@
 from pygame import Color, Rect, Surface
 import pygame
-from components.Drawable import Drawable
-from components.Image import Image
-from components.Text import Text
-from components.Drawable import PositionType
-from components.Text import TextAlign
+from ui.components.Drawable import Drawable
+from ui.components.Image import Image
+from ui.components.Text import Text
+from ui.components.Drawable import PositionType
+from ui.components.Text import TextAlign
 
 
 class CardItem(Drawable):

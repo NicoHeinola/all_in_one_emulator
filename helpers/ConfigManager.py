@@ -4,11 +4,12 @@ from typing import Dict
 
 
 class ConfigManager:
-    config_path = './config.json'
-    config_data = {}
-    loaded_config_once = False
+    config_path: str = './config.json'
+    config_data: dict = {}
+    loaded_config_once: bool = False
     extensions_per_emulator: Dict[str, str] = None
-    loaded_extensions_per_emulator_once = False
+    loaded_extensions_per_emulator_once: bool = False
+    actions_per_keycodes: Dict[str, Dict[int, str]] = {"controller": {}, "keyboard": {}}
 
     @staticmethod
     def get_emulator_executable_path(emulator) -> str:
@@ -35,6 +36,25 @@ class ConfigManager:
             ConfigManager.load_emulator_extension_map()
 
         return ConfigManager.extensions_per_emulator
+
+    @staticmethod
+    def generate_actions_per_keycodes() -> None:
+        config: dict = ConfigManager.get_config()
+        keybinds: dict = config['keybinds']
+        for action, schemes in keybinds.items():
+            for keycodes in schemes['controller']:
+                for keycode in keycodes:
+                    ConfigManager.actions_per_keycodes['controller'][keycode] = action
+            for keycodes in schemes['keyboard']:
+                for keycode in keycodes:
+                    ConfigManager.actions_per_keycodes['keyboard'][keycode] = action
+
+    @staticmethod
+    def get_actions_per_keycodes() -> Dict[int, str]:
+        if not ConfigManager.actions_per_keycodes:
+            ConfigManager.generate_actions_per_keycodes()
+
+        return ConfigManager.actions_per_keycodes
 
     @staticmethod
     def load_config() -> None:

@@ -1,5 +1,6 @@
 from helpers.ConfigManager import ConfigManager
 from helpers.EmulatorDownloadManager import EmulatorDownloadManager
+from ui.MainUI import MainUI
 
 
 if __name__ == '__main__':
@@ -11,3 +12,6 @@ if __name__ == '__main__':
             continue
         ok = EmulatorDownloadManager.download_emulator(emulator)
         print(ok, emulator)
+
+    ui = MainUI(1280, 720)
+    ui.run()
