@@ -31,6 +31,7 @@ class TestScene(Scene):
         carditem.load_image('images/icons/game-controller.png')
 
         frame.add_component(carditem)
+        frame.recalculate_position()
 
     def draw(self) -> None:
         self._window.fill(Color(255, 255, 255))

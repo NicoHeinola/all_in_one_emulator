@@ -42,7 +42,7 @@ class Image(Drawable):
         image = self._original_image.copy()
         width = self.get_width()
         height = self.get_height()
-        image = pygame.transform.scale(image, (width, height))
+        image = pygame.transform.smoothscale(image, (width, height))
         self._image = image
 
     def _get_image(self) -> Surface:

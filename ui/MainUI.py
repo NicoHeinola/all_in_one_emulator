@@ -5,6 +5,7 @@ import pygame
 from scenes.TestScene import TestScene
 from scenes.SceneLoader import SceneLoader
 pygame.init()
+pygame.font.init()  # you have to call this at the start,
 
 
 class MainUI(SceneLoader):

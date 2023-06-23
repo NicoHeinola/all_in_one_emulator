@@ -27,11 +27,22 @@ class Drawable:
         self._width: float = width
         self._height: float = height
 
+        # Animations
+        self._size_animation_speed: float = 1
+        self._target_width: float = width
+        self._target_height: float = height
+        self._target_width_dir: int = 1
+        self._target_height_dir: int = 1
+        self._animate_size = False
+
         self._parent: Drawable = None
         self._components: List[Drawable] = []
         self._position_type: PositionType = PositionType.RELATIVE
 
         self.recalculate_position()
+
+    def set_size_animation_speed(self, speed: float) -> None:
+        self._size_animation_speed = speed
 
     def set_aspect_ratio(self, ratio: int) -> None:
         self._aspect_ratio = ratio
@@ -63,11 +74,39 @@ class Drawable:
             height = self.get_width() / self._aspect_ratio
         self._height = height
 
+        if self._target_width < self.get_width():
+            self._target_width_dir = -1
+        else:
+            self._target_width_dir = 1
+
+    def set_animated_height(self, height):
+        if height == 0 and self._aspect_ratio != 0:
+            height = self.get_width() / self._aspect_ratio
+        self._target_height = height
+        self._animate_size = True
+
+        if self._target_height < self.get_height():
+            self._target_height_dir = -1
+        else:
+            self._target_height_dir = 1
+
+    def set_animated_width(self, width):
+        if width == 0:
+            width = self.get_height() * self._aspect_ratio
+        self._target_width = width
+        self._animate_size = True
+
     def get_width(self) -> float:
         return self._width
 
     def get_height(self) -> float:
         return self._height
+
+    def _get_target_width(self) -> float:
+        return self._target_width
+
+    def _get_target_height(self) -> float:
+        return self._target_height
 
     def set_x(self, x: int) -> None:
         self._x = x
@@ -89,7 +128,7 @@ class Drawable:
 
     def recalculate_x(self) -> None:
         # Relative is default
-        x = self.get_x()
+        x = self._x
         if self._parent is not None:
             x += self._parent.get_x()
 
@@ -108,7 +147,7 @@ class Drawable:
 
     def recalculate_y(self) -> None:
         # Relative is default
-        y = self.get_y()
+        y = self._y
         if self._parent is not None:
             y += self._parent.get_y()
 
@@ -130,11 +169,57 @@ class Drawable:
             component.draw()
 
     def update(self) -> None:
+        if self._animate_size:
+            self._do_size_animation()
+
         for component in self._components:
             component.update()
+
+    def _do_size_animation(self) -> None:
+        # Get size variables
+        width = self.get_width()
+        height = self.get_height()
+        target_width = self._get_target_width()
+        target_height = self._get_target_height()
+
+        # If we need to animate width
+        if width != target_width:
+            new_width = width + self._size_animation_speed * self._target_width_dir
+
+            # Check if we've gone past target
+            if self._target_width_dir == 1 and new_width > target_width:
+                new_width = target_width
+            elif self._target_width_dir == -1 and new_width < target_width:
+                new_width = target_width
+
+            self.set_width(new_width)
+
+        # If we need to animate height
+        if height != target_height:
+            new_height = height + self._size_animation_speed * self._target_height_dir
+
+            # Check if we've gone past target
+            if self._target_height_dir == 1 and new_height > target_height:
+                new_height = target_height
+            elif self._target_width_dir == -1 and new_height < target_height:
+                new_height = target_height
+
+            self.set_height(new_height)
+
+        # If all animations are finished
+        if self.get_height() == target_height and self.get_width() == target_width:
+            self._animate_size = False
+
+        self.recalculate_position()
 
     @staticmethod
     def get_center(pos: float, size: int, parent_size: int):
         left_over_size = parent_size - size
         center_pos = pos + left_over_size / 2
         return round(center_pos)
+
+    @staticmethod
+    def get_right_most(pos: float, size: int, parent_size: int):
+        left_over_size = parent_size - size
+        right_most_pos = pos + left_over_size
+        return round(right_most_pos)
