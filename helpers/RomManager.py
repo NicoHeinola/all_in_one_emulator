@@ -2,7 +2,6 @@ import os
 import time
 from typing import Dict, List
 from ConfigManager import ConfigManager
-import pyautogui
 from pywinauto import Application
 
 from HotkeyManager import HotkeyManager

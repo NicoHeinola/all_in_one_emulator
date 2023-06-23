@@ -2,7 +2,6 @@ from enum import Enum
 import os
 import re
 from typing import List
-from flask import request
 import requests
 from bs4 import BeautifulSoup
 import zipfile
