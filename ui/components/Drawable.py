@@ -41,6 +41,9 @@ class Drawable:
 
         self.recalculate_position()
 
+    def _child_width_updated(self, child) -> None:
+        pass
+
     def set_size_animation_speed(self, speed: float) -> None:
         self._size_animation_speed = speed
 
@@ -48,6 +51,9 @@ class Drawable:
         self._aspect_ratio = ratio
         self.set_width(self._width)
         self.set_height(self._height)
+
+    def get_position_type(self) -> PositionType:
+        return self._position_type
 
     def set_position_type(self, position_type: PositionType):
         self._position_type = position_type
@@ -59,6 +65,7 @@ class Drawable:
 
     def remove_component(self, component):
         self._components.remove(component)
+        self.recalculate_position()
 
     def add_component(self, component):
         component.set_parent(self)
@@ -68,6 +75,9 @@ class Drawable:
         if width == 0:
             width = self.get_height() * self._aspect_ratio
         self._width = width
+
+        if self._parent is not None:
+            self._parent._child_width_updated(self)
 
     def set_height(self, height: float) -> None:
         if height == 0 and self._aspect_ratio != 0:
@@ -126,6 +136,14 @@ class Drawable:
         self.recalculate_x()
         self.recalculate_y()
 
+    def _recalculate_children_x(self) -> None:
+        for component in self._components:
+            component.recalculate_x()
+
+    def _recalculate_children_y(self) -> None:
+        for component in self._components:
+            component.recalculate_y()
+
     def recalculate_x(self) -> None:
         # Relative is default
         x = self._x
@@ -142,8 +160,7 @@ class Drawable:
                 x = Drawable.get_center(parent_x, width, parent_width)
         self._draw_x = x
 
-        for component in self._components:
-            component.recalculate_x()
+        self._recalculate_children_x()
 
     def recalculate_y(self) -> None:
         # Relative is default
@@ -161,8 +178,7 @@ class Drawable:
                 y = Drawable.get_center(parent_y, height, parent_height)
         self._draw_y = y
 
-        for component in self._components:
-            component.recalculate_y()
+        self._recalculate_children_y()
 
     def draw(self) -> None:
         for component in self._components:

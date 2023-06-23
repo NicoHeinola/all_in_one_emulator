@@ -2,8 +2,8 @@
 from typing import List
 import pygame
 
-from scenes.TestScene import TestScene
 from scenes.SceneLoader import SceneLoader
+from pre_made_scenes.MainMenu import MainMenu
 pygame.init()
 pygame.font.init()  # you have to call this at the start,
 
@@ -25,10 +25,10 @@ class MainUI(SceneLoader):
         self._didplay_height = displayh
 
         # Scenes
-        test_scene = TestScene(self._window)
-        self.add_scene('test', test_scene)
+        main_menu = MainMenu(self._window)
+        self.add_scene('main_menu', main_menu)
 
-        self.set_active_scene('test')
+        self.set_active_scene('main_menu')
 
     def run(self):
         # Put all variables up here
