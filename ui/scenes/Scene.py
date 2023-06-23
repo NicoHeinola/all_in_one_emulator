@@ -1,19 +1,27 @@
 from typing import List
+
+from pygame import Surface
 from components.Drawable import Drawable
 
 
 class Scene:
-    def __init__(self, window) -> None:
-        self._window = window
+    def __init__(self, window: Surface) -> None:
+        self._window: Surface = window
         self._elements: List[Drawable] = []
 
-    def _add_element(self, element: Drawable):
+    def create_elements(self) -> None:
+        self._empty_elements()
+
+    def _add_element(self, element: Drawable) -> None:
         self._elements.append(element)
 
-    def draw(self):
+    def _empty_elements(self) -> None:
+        self._elements = []
+
+    def draw(self) -> None:
         for element in self._elements:
             element.draw()
 
-    def update(self):
+    def update(self) -> None:
         for element in self._elements:
             element.update()
