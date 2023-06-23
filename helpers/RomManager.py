@@ -102,5 +102,5 @@ if __name__ == "__main__":
     roms[0].open()
     roms[0].make_top_most()
     roms[0].make_full_screen()
-    time.sleep(2)
-    roms[0].close()
+    # time.sleep(2)
+    # roms[0].close()

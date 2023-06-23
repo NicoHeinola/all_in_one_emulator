@@ -1,12 +1,15 @@
-from typing import List
+from typing import Dict, List
 
 from pygame import Surface
+from ui.InputActions import InputAction
 from ui.components.Drawable import Drawable
 
 
 class Scene:
-    def __init__(self, window: Surface) -> None:
+    def __init__(self, window: Surface, scene_loader) -> None:
+        from ui.scenes.Scene import SceneLoader
         self._window: Surface = window
+        self._scene_loader: SceneLoader = scene_loader
         self._elements: List[Drawable] = []
 
     def create_elements(self) -> None:
@@ -17,6 +20,9 @@ class Scene:
 
     def _empty_elements(self) -> None:
         self._elements = []
+
+    def action_performed(self, action: InputAction):
+        pass
 
     def joystick_key_down(self, key_code) -> None:
         pass
@@ -31,3 +37,23 @@ class Scene:
     def update(self) -> None:
         for element in self._elements:
             element.update()
+
+
+class SceneLoader:
+
+    def __init__(self) -> None:
+        self._scenes: Dict[str, Scene] = {}
+        self._active_scene: Scene = None
+
+    def add_scene(self, title: str, scene: Scene):
+        self._scenes[title] = scene
+
+    def set_active_scene(self, title: str):
+        self._active_scene = self._scenes[title]
+
+    def get_active_scene(self) -> Scene:
+        return self._active_scene
+
+    def build_scenes(self) -> None:
+        for scene in self._scenes.values():
+            scene.create_elements()

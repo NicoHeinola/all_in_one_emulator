@@ -90,6 +90,7 @@ class Drawable:
             self._target_width_dir = 1
 
     def set_animated_height(self, height):
+        self.set_height(self._get_target_height())
         if height == 0 and self._aspect_ratio != 0:
             height = self.get_width() / self._aspect_ratio
         self._target_height = height
@@ -101,6 +102,7 @@ class Drawable:
             self._target_height_dir = 1
 
     def set_animated_width(self, width):
+        self.set_width(self._get_target_width())
         if width == 0:
             width = self.get_height() * self._aspect_ratio
         self._target_width = width
@@ -213,11 +215,10 @@ class Drawable:
         # If we need to animate height
         if height != target_height:
             new_height = height + self._size_animation_speed * self._target_height_dir
-
             # Check if we've gone past target
             if self._target_height_dir == 1 and new_height > target_height:
                 new_height = target_height
-            elif self._target_width_dir == -1 and new_height < target_height:
+            elif self._target_height_dir == -1 and new_height < target_height:
                 new_height = target_height
 
             self.set_height(new_height)

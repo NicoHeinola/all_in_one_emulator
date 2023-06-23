@@ -9,7 +9,7 @@ class ConfigManager:
     loaded_config_once: bool = False
     extensions_per_emulator: Dict[str, str] = None
     loaded_extensions_per_emulator_once: bool = False
-    actions_per_keycodes: Dict[str, Dict[int, str]] = {"controller": {}, "keyboard": {}}
+    actions_per_keycodes: Dict[str, Dict[int, str]] = None
 
     @staticmethod
     def get_emulator_executable_path(emulator) -> str:
@@ -39,15 +39,15 @@ class ConfigManager:
 
     @staticmethod
     def generate_actions_per_keycodes() -> None:
+        ConfigManager.actions_per_keycodes = {"controller": {}, "keyboard": {}}
+
         config: dict = ConfigManager.get_config()
         keybinds: dict = config['keybinds']
         for action, schemes in keybinds.items():
-            for keycodes in schemes['controller']:
-                for keycode in keycodes:
-                    ConfigManager.actions_per_keycodes['controller'][keycode] = action
-            for keycodes in schemes['keyboard']:
-                for keycode in keycodes:
-                    ConfigManager.actions_per_keycodes['keyboard'][keycode] = action
+            for keycode in schemes['controller']:
+                ConfigManager.actions_per_keycodes['controller'][keycode] = action
+            for keycode in schemes['keyboard']:
+                ConfigManager.actions_per_keycodes['keyboard'][keycode] = action
 
     @staticmethod
     def get_actions_per_keycodes() -> Dict[int, str]:
