@@ -61,7 +61,6 @@ class EmulatorDownloadManager:
             # Remove the original zip file
             os.remove(save_file_path)
 
-        # If
         needs_to_open_once = emulator_config['needs_to_open_once']
         if needs_to_open_once:
             config: dict = ConfigManager.get_config()
