@@ -27,6 +27,11 @@ class Drawable:
         self._width: float = width
         self._height: float = height
 
+        self._padding_top: float = 0
+        self._padding_bottom: float = 0
+        self._padding_left: float = 0
+        self._padding_right: float = 0
+
         # Animations
         self._size_animation_speed: float = 1
         self._target_width: float = width
@@ -40,6 +45,40 @@ class Drawable:
         self._position_type: PositionType = PositionType.RELATIVE
 
         self.recalculate_position()
+
+    def get_horizontal_padding(self) -> float:
+        return self.get_padding_left() + self.get_padding_right()
+
+    def get_vertical_padding(self) -> float:
+        return self.get_padding_top() + self.get_padding_bottom()
+
+    def get_padding_top(self) -> float:
+        return self._padding_top
+
+    def get_padding_bottom(self) -> float:
+        return self._padding_bottom
+
+    def get_padding_left(self) -> float:
+        return self._padding_left
+
+    def get_padding_right(self) -> float:
+        return self._padding_right
+
+    def set_padding_top(self, padding: float) -> None:
+        self._padding_top = padding
+        self.recalculate_y()
+
+    def set_padding_bottom(self, padding: float) -> None:
+        self._padding_bottom = padding
+        self.recalculate_y()
+
+    def set_padding_left(self, padding: float) -> None:
+        self._padding_left = padding
+        self.recalculate_x()
+
+    def set_padding_right(self, padding: float) -> None:
+        self._padding_right = padding
+        self.recalculate_x()
 
     def _child_width_updated(self, child) -> None:
         pass
@@ -59,15 +98,15 @@ class Drawable:
         self._position_type = position_type
         self.recalculate_position()
 
-    def set_parent(self, parent):
+    def set_parent(self, parent) -> None:
         self._parent = parent
         self.recalculate_position()
 
-    def remove_component(self, component):
+    def remove_component(self, component) -> None:
         self._components.remove(component)
         self.recalculate_position()
 
-    def add_component(self, component):
+    def add_component(self, component) -> None:
         component.set_parent(self)
         self._components.append(component)
 
@@ -89,7 +128,7 @@ class Drawable:
         else:
             self._target_width_dir = 1
 
-    def set_animated_height(self, height):
+    def set_animated_height(self, height) -> None:
         self.set_height(self._get_target_height())
         if height == 0 and self._aspect_ratio != 0:
             height = self.get_width() / self._aspect_ratio
@@ -101,7 +140,7 @@ class Drawable:
         else:
             self._target_height_dir = 1
 
-    def set_animated_width(self, width):
+    def set_animated_width(self, width) -> None:
         self.set_width(self._get_target_width())
         if width == 0:
             width = self.get_height() * self._aspect_ratio
@@ -150,7 +189,7 @@ class Drawable:
         # Relative is default
         x = self._x
         if self._parent is not None:
-            x += self._parent.get_x()
+            x += self._parent.get_x() + self._parent.get_padding_left()
 
         if self._position_type == PositionType.ABSOLUTE:
             x = self.get_x()
@@ -158,17 +197,18 @@ class Drawable:
             if self._parent is not None:
                 parent_x = self._parent.get_x()
                 parent_width = self._parent.get_width()
+                parent_padding_left = self._parent.get_padding_left()
+                parent_padding_right = self._parent.get_padding_right()
                 width = self.get_width()
-                x = Drawable.get_center(parent_x, width, parent_width)
+                x = Drawable.get_center(parent_x + parent_padding_left, width, parent_width - parent_padding_left - parent_padding_right)
         self._draw_x = x
-
         self._recalculate_children_x()
 
     def recalculate_y(self) -> None:
         # Relative is default
         y = self._y
         if self._parent is not None:
-            y += self._parent.get_y()
+            y += self._parent.get_y() + self._parent.get_padding_top()
 
         if self._position_type == PositionType.ABSOLUTE:
             y = self.get_y()
@@ -176,8 +216,9 @@ class Drawable:
             if self._parent is not None:
                 parent_y = self._parent.get_y()
                 parent_height = self._parent.get_height()
+                parent_padding_top = self._parent.get_padding_top()
                 height = self.get_height()
-                y = Drawable.get_center(parent_y, height, parent_height)
+                y = Drawable.get_center(parent_y + parent_padding_top, height, parent_height - parent_padding_top)
         self._draw_y = y
 
         self._recalculate_children_y()

@@ -17,7 +17,7 @@ class MainUI(SceneLoader):
         super().__init__()
 
         # Window Information
-        self._window: pygame.Surface = pygame.display.set_mode((displayw, displayh), pygame.RESIZABLE)
+        self._window: pygame.Surface = pygame.display.set_mode((displayw, displayh), pygame.RESIZABLE | pygame.SRCALPHA)
 
         # Set title of screen
         pygame.display.set_caption("All In One Emulator")

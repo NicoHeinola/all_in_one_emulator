@@ -117,6 +117,20 @@
                 97
             ]
         },
+        "down": {
+            "controller": [],
+            "keyboard": [
+                115,
+                1073741905
+            ]
+        },
+        "up": {
+            "controller": [],
+            "keyboard": [
+                119,
+                1073741906
+            ]
+        },
         "activate": {
             "controller": [
                 0
