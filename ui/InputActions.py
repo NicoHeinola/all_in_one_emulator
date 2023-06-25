@@ -7,3 +7,4 @@ class InputAction(Enum):
     UP = 2
     DOWN = 3
     ACTIVATE = 4
+    BACK = 5

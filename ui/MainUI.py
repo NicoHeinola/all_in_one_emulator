@@ -30,12 +30,12 @@ class MainUI(SceneLoader):
 
         # Scenes
         main_menu = MainMenuScene(self._window, self)
-        self.add_scene('main_menu', main_menu)
+        self.add_scene('main-menu', main_menu)
 
         game_picker_scene = GameListScene(self._window, self)
-        self.add_scene('game_list', game_picker_scene)
+        self.add_scene('game-list', game_picker_scene)
 
-        self.set_active_scene('game_list')
+        self.set_active_scene('main-menu')
 
     def run(self):
         # Put all variables up here

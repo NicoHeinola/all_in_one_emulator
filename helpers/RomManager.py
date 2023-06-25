@@ -1,10 +1,13 @@
 import os
+import sys
 import time
-from typing import Dict, List
-from ConfigManager import ConfigManager
 from pywinauto import Application
+from typing import Dict, List
 
-from HotkeyManager import HotkeyManager
+sys.path.append("./")
+
+from helpers.ConfigManager import ConfigManager
+from helpers.HotkeyManager import HotkeyManager
 
 
 class Rom:
@@ -12,6 +15,9 @@ class Rom:
         self._name = name
         self._extension = extension
         self._open = False
+
+    def get_name_with_extension(self) -> str:
+        return f"{self._name}.{self._extension}"
 
     def get_name(self) -> str:
         return self._name
@@ -50,7 +56,6 @@ class Rom:
 
         emulator_executable_path = ConfigManager.get_emulator_executable_path(self.get_emulator())
         app = Application().connect(path=emulator_executable_path)
-
         # Set the program window as topmost
         window = app.top_window()
         window.set_focus()  # Activate the window

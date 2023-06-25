@@ -85,7 +85,7 @@ class MainMenuScene(Scene):
         elif action == InputAction.LEFT:
             self._set_card_selected_index(self._selected_card_index - 1)
         elif action == InputAction.ACTIVATE:
-            self._scene_loader.set_active_scene('game_list')
+            self._scene_loader.set_active_scene('game-list')
 
     def draw(self) -> None:
         self._window.fill(Color(255, 255, 255))

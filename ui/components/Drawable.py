@@ -123,13 +123,7 @@ class Drawable:
             height = self.get_width() / self._aspect_ratio
         self._height = height
 
-        if self._target_width < self.get_width():
-            self._target_width_dir = -1
-        else:
-            self._target_width_dir = 1
-
     def set_animated_height(self, height) -> None:
-        self.set_height(self._get_target_height())
         if height == 0 and self._aspect_ratio != 0:
             height = self.get_width() / self._aspect_ratio
         self._target_height = height
@@ -141,11 +135,15 @@ class Drawable:
             self._target_height_dir = 1
 
     def set_animated_width(self, width) -> None:
-        self.set_width(self._get_target_width())
         if width == 0:
             width = self.get_height() * self._aspect_ratio
         self._target_width = width
         self._animate_size = True
+
+        if self._target_width < self.get_width():
+            self._target_width_dir = -1
+        else:
+            self._target_width_dir = 1
 
     def get_width(self) -> float:
         return self._width
