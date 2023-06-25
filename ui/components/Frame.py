@@ -50,6 +50,7 @@ class Frame(Drawable):
                 component_positions = Frame.calculate_center_positions(component_widths, self.get_x(), self.get_width(), self._horizontal_gap)
             for index, component in enumerate(self._components):
                 component.set_x(component_positions[index])
+                component.recalculate_x()
 
     @staticmethod
     def calculate_center_positions(element_widths: List[float], start_pos: int, width: float, gap: int = 0) -> List[int]:

@@ -1,6 +1,7 @@
 from enum import Enum
 from helpers.ConfigManager import ConfigManager
 from ui.InputActions import InputAction
+from ui.pre_made_scenes.GameDownloadScene import GameDownloadScene
 from ui.pre_made_scenes.GameListScene import GameListScene
 from ui.pre_made_scenes.MainMenuScene import MainMenuScene
 from typing import List
@@ -28,6 +29,13 @@ class MainUI(SceneLoader):
         self._display_width = displayw
         self._didplay_height = displayh
 
+        # Inputs
+        self._delay_until_hold: int = 20  # How long (in frames) to press 1 key until it starts to register it as holding
+        self._delay_until_hold_count: int = 0
+        self._hold_delay: int = 1  # How many frames are between hold inputs
+        self._hold_delay_count: int = 0
+        self._hold_action: InputAction = None
+
         # Scenes
         main_menu = MainMenuScene(self._window, self)
         self.add_scene('main-menu', main_menu)
@@ -35,7 +43,15 @@ class MainUI(SceneLoader):
         game_picker_scene = GameListScene(self._window, self)
         self.add_scene('game-list', game_picker_scene)
 
+        game_download_scene = GameDownloadScene(self._window, self)
+        self.add_scene('game-download', game_download_scene)
+
         self.set_active_scene('main-menu')
+
+    def _reset_hold(self) -> None:
+        self._hold_delay_count: int = 0
+        self._delay_until_hold_count: int = 0
+        self._hold_action: InputAction = None
 
     def run(self):
         # Put all variables up here
@@ -51,6 +67,16 @@ class MainUI(SceneLoader):
         while stopped == False:
             scene = self.get_active_scene()
 
+            if self._hold_action is not None:
+                if self._delay_until_hold_count < self._delay_until_hold:
+                    self._delay_until_hold_count += 1
+                elif self._hold_delay_count < self._hold_delay:
+                    self._hold_delay_count += 1
+                else:
+                    self._hold_delay_count = 0
+                    print("Performing!", self._hold_action)
+                    scene.action_performed(self._hold_action)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -60,13 +86,19 @@ class MainUI(SceneLoader):
                     key_code = event.key
                     if key_code in ConfigManager.get_actions_per_keycodes()['keyboard']:
                         action: str = ConfigManager.get_actions_per_keycodes()['keyboard'][key_code]
-                        scene.action_performed(InputAction[action.upper()])
+                        input_action: InputAction = InputAction[action.upper()]
+                        self._hold_action = input_action
+                        scene.action_performed(input_action)
+                elif event.type == pygame.KEYUP:
+                    self._reset_hold()
                 elif event.type == pygame.JOYBUTTONDOWN:
                     key_code = event.button
                     if key_code in ConfigManager.get_actions_per_keycodes()['controller']:
                         action: str = ConfigManager.get_actions_per_keycodes()['controller'][key_code]
                         scene.action_performed(InputAction[action.upper()])
                     print("JOYSTICK BUTTON DOWN:", key_code)
+                elif event.type == pygame.JOYBUTTONUP:
+                    self._reset_hold()
                 elif event.type == pygame.WINDOWRESIZED:
                     self.build_scenes()
 

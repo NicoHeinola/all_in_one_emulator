@@ -64,6 +64,7 @@ class VerticalListItem(Drawable):
 
     def set_text(self, text: str) -> None:
         self._text.set_text(text)
+        self._text.render_text()
 
     def set_index(self, index: int, do_recalculation: bool = True) -> None:
         self._index = index

@@ -17,7 +17,7 @@ class CardItem(Drawable):
         self._text_component.set_font_size(45)
         self._text_component.set_word_wrap(True)
         self._text_component.set_position_type(PositionType.HORIZONTAL_CENTER)
-        self._text_component.set_text_align(TextAlign.LEFT)
+        self._text_component.set_text_align(TextAlign.CENTER)
         self._text_component.set_text_push_down(True)
         self.add_component(self._text_component)
         self.set_text('Games')
@@ -31,6 +31,7 @@ class CardItem(Drawable):
 
     def set_text(self, text: str) -> None:
         self._text_component.set_text(text)
+        self._text_component.render_text()
 
     def set_image(self, image: Image) -> None:
         if self._image_component is not None:

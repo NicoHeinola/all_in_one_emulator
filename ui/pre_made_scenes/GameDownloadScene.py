@@ -8,7 +8,7 @@ from ui.components.ListComponent import ListComponent
 from ui.scenes.Scene import Scene
 
 
-class GameListScene(Scene):
+class GameDownloadScene(Scene):
     def __init__(self, window: Surface, scene_loader) -> None:
         super().__init__(window, scene_loader)
         self._game_list: ListComponent = None
@@ -23,29 +23,26 @@ class GameListScene(Scene):
         frame.set_force_horizontal_layout(ForceHorizontalLayout.NONE)
         self._add_element(frame)
 
-        game_list = ListComponent(self._window, 700, 600, 0, 0)
+        # Game list
+        game_list = ListComponent(self._window, 500, 400, 0, 0)
         self._game_list = game_list
         game_list.set_color(154, 234, 172)
         game_list.set_selected_color(110, 200, 146)
         game_list.set_border_radius(15)
         game_list.set_padding_top(20)
         game_list.set_padding_bottom(20)
-        game_list.set_position_type(PositionType.CENTER)
-
-        self._rom_list = RomManager.get_rom_list()
-
-        game_list.add_list_item("Go back", lambda: self._scene_loader.set_active_scene('main-menu'))
-
-        for i, rom in enumerate(self._rom_list):
-            game_list.add_list_item(rom.get_name_with_extension(), lambda i=i: self._open_rom(i))
+        game_list.set_y(frame.get_height() - game_list.get_height() - 50)
+        game_list.set_position_type(PositionType.HORIZONTAL_CENTER)
 
         for i in range(100):
-            game_list.add_list_item(f'test {i}', lambda i=i: print(f'test {i}'))
-
+            game_list.add_list_item(f'Game {i}', lambda i=i: print(f'Game {i}'))
         game_list.set_selected_index(0)
 
         frame.add_component(game_list)
-        frame.recalculate_position()
+
+        # Search
+        search_frame = Frame(window, game_list.get_width(), 50)
+        frame.add_component(search_frame)
 
     def _open_rom(self, index: int) -> None:
         rom: Rom = self._rom_list[index]

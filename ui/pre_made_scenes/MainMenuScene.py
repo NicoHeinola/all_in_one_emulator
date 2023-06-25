@@ -29,7 +29,8 @@ class MainMenuScene(Scene):
         card_height = 400
 
         frame = Frame(window, window.get_width(), window.get_height())
-        frame.set_force_horizontal_layout(ForceHorizontalLayout.SPACE_EVENLY)
+        frame.set_force_horizontal_layout(ForceHorizontalLayout.CENTER)
+        frame.set_horizontal_gap(50)
         self._add_element(frame)
 
         animation_speed = 4
@@ -38,15 +39,8 @@ class MainMenuScene(Scene):
         games_card_item.set_size_animation_speed(animation_speed)
         games_card_item.set_color(153, 225, 235)
         games_card_item.set_position_type(PositionType.VERTICAL_CENTER)
-        games_card_item.load_image('images/icons/game-controller.png')
-        frame.add_component(games_card_item)
-        self._menu_components.append(games_card_item)
-
-        games_card_item = CardItem(window, card_width, card_height)
-        games_card_item.set_size_animation_speed(animation_speed)
-        games_card_item.set_color(153, 225, 235)
-        games_card_item.set_position_type(PositionType.VERTICAL_CENTER)
-        games_card_item.load_image('images/icons/game-controller.png')
+        games_card_item.load_image('images/icons/download-game.png')
+        games_card_item.set_text('Download Games')
         frame.add_component(games_card_item)
         self._menu_components.append(games_card_item)
 

@@ -59,7 +59,6 @@ class Text(Drawable):
 
     def set_text_push_down(self, text_push_down: bool) -> None:
         self._text_push_down = text_push_down
-        self._render_text()
 
     def set_parent(self, parent):
         super().set_parent(parent)
@@ -67,38 +66,31 @@ class Text(Drawable):
 
     def set_max_width(self, max_width: float) -> None:
         self._max_width = max_width
-        self._render_text()
 
     def set_text_align(self, text_align: TextAlign) -> None:
         self._text_align = text_align
 
     def set_word_wrap(self, word_wrap: bool) -> None:
         self._word_wrap = word_wrap
-        self._render_text()
 
     def set_color(self, r: int, g: int, b: int, a: int = 255):
         self._color = Color(r, g, b, a)
-        self._render_text()
 
     def set_font(self, font: pygame.font.Font) -> None:
         self._font = font
-        self._render_text()
 
     def set_font_from_fonts(self, font_name: str) -> None:
         self._font_name = font_name
         self._font = pygame.font.Font(os.path.join("fonts", font_name), self._font_size)
-        self._render_text()
 
     def set_font_size(self, size: int) -> None:
         self._font_size = size
         self._font = pygame.font.Font(os.path.join("fonts", self._font_name), self._font_size)
-        self._render_text()
 
     def set_text(self, text: str) -> None:
         self._text = text
-        self._render_text()
 
-    def _render_text(self) -> None:
+    def render_text(self) -> None:
         self._text_surfaces = []
 
         if self._font is None:

@@ -44,8 +44,6 @@ class Drawable:
         self._components: List[Drawable] = []
         self._position_type: PositionType = PositionType.RELATIVE
 
-        self.recalculate_position()
-
     def get_horizontal_padding(self) -> float:
         return self.get_padding_left() + self.get_padding_right()
 
@@ -66,19 +64,15 @@ class Drawable:
 
     def set_padding_top(self, padding: float) -> None:
         self._padding_top = padding
-        self.recalculate_y()
 
     def set_padding_bottom(self, padding: float) -> None:
         self._padding_bottom = padding
-        self.recalculate_y()
 
     def set_padding_left(self, padding: float) -> None:
         self._padding_left = padding
-        self.recalculate_x()
 
     def set_padding_right(self, padding: float) -> None:
         self._padding_right = padding
-        self.recalculate_x()
 
     def _child_width_updated(self, child) -> None:
         pass
@@ -96,15 +90,12 @@ class Drawable:
 
     def set_position_type(self, position_type: PositionType):
         self._position_type = position_type
-        self.recalculate_position()
 
     def set_parent(self, parent) -> None:
         self._parent = parent
-        self.recalculate_position()
 
     def remove_component(self, component) -> None:
         self._components.remove(component)
-        self.recalculate_position()
 
     def add_component(self, component) -> None:
         component.set_parent(self)
@@ -159,11 +150,9 @@ class Drawable:
 
     def set_x(self, x: int) -> None:
         self._x = x
-        self.recalculate_x()
 
     def set_y(self, y: int) -> None:
         self._y = y
-        self.recalculate_y()
 
     def get_x(self) -> int:
         return self._draw_x
