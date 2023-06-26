@@ -39,9 +39,6 @@ class GameListScene(Scene):
         for i, rom in enumerate(self._rom_list):
             game_list.add_list_item(rom.get_name_with_extension(), lambda i=i: self._open_rom(i))
 
-        for i in range(100):
-            game_list.add_list_item(f'test {i}', lambda i=i: print(f'test {i}'))
-
         game_list.set_selected_index(0)
 
         frame.add_component(game_list)

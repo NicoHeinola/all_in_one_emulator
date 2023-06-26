@@ -18,7 +18,6 @@ class Text(Drawable):
         self._font_size: int = 60
         self._font_name: str = ''
         self._font: pygame.font.Font = None
-        self._color = Color(0, 0, 0)
 
         self._text_surfaces: List[Surface] = []
         self._text_surface_positions: List[Dict[str, int]] = []
@@ -29,6 +28,7 @@ class Text(Drawable):
         self._max_width: float = 0
 
         super().__init__(window, width, height, x, y)
+        self._color = Color(0, 0, 0)
 
         self.set_font_from_fonts('OpenSans-VariableFont.ttf')
 
@@ -72,9 +72,6 @@ class Text(Drawable):
 
     def set_word_wrap(self, word_wrap: bool) -> None:
         self._word_wrap = word_wrap
-
-    def set_color(self, r: int, g: int, b: int, a: int = 255):
-        self._color = Color(r, g, b, a)
 
     def set_font(self, font: pygame.font.Font) -> None:
         self._font = font

@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List
-from pygame import Surface
+from pygame import Color, Surface
+import pygame
 from ui.components.Drawable import Drawable
 from ui.components.Drawable import PositionType
 
@@ -17,8 +18,12 @@ class Frame(Drawable):
         self._force_horizontal_layout: ForceHorizontalLayout = ForceHorizontalLayout.NONE
         self._horizontal_gap: float = 0
         self._children_can_affect_layout: bool = True
+        self._draw_debug: bool = False
 
         super().__init__(window, width, height, x, y)
+
+    def set_draw_debug(self, debug: bool) -> None:
+        self._draw_debug = debug
 
     def set_children_can_affect_layout(self, children_can_affect_layout: bool) -> None:
         self._children_can_affect_layout = children_can_affect_layout
@@ -49,7 +54,7 @@ class Frame(Drawable):
             elif self._force_horizontal_layout == ForceHorizontalLayout.CENTER:
                 component_positions = Frame.calculate_center_positions(component_widths, self.get_x(), self.get_width(), self._horizontal_gap)
             for index, component in enumerate(self._components):
-                component.set_x(component_positions[index])
+                component.set_x(component_positions[index] - self.get_x())
                 component.recalculate_x()
 
     @staticmethod
@@ -116,3 +121,9 @@ class Frame(Drawable):
             x += element_width + space
 
         return element_positions
+
+    def draw(self) -> None:
+        super().draw()
+
+        if self._draw_debug:
+            pygame.draw.rect(self._window, Color(255, 0, 0), (self.get_x(), self.get_y(), self.get_width(), self.get_height()), 1)

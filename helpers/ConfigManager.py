@@ -39,15 +39,14 @@ class ConfigManager:
 
     @staticmethod
     def generate_actions_per_keycodes() -> None:
-        ConfigManager.actions_per_keycodes = {"controller": {}, "keyboard": {}}
+        ConfigManager.actions_per_keycodes = {"controller": {}, "keyboard": {}, "mouse": {}}
 
         config: dict = ConfigManager.get_config()
         keybinds: dict = config['keybinds']
         for action, schemes in keybinds.items():
-            for keycode in schemes['controller']:
-                ConfigManager.actions_per_keycodes['controller'][keycode] = action
-            for keycode in schemes['keyboard']:
-                ConfigManager.actions_per_keycodes['keyboard'][keycode] = action
+            for scheme in schemes:
+                for keycode in schemes[scheme]:
+                    ConfigManager.actions_per_keycodes[scheme][keycode] = action
 
     @staticmethod
     def get_actions_per_keycodes() -> Dict[int, str]:

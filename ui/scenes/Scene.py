@@ -11,6 +11,8 @@ class Scene:
         self._window: Surface = window
         self._scene_loader: SceneLoader = scene_loader
         self._elements: List[Drawable] = []
+        self._mouse_x: int = 0
+        self._mouse_y: int = 0
 
     def create_elements(self) -> None:
         self._empty_elements()
@@ -23,6 +25,13 @@ class Scene:
 
     def action_performed(self, action: InputAction):
         pass
+
+    def mouse_action_performed(self, action: InputAction) -> None:
+        self.action_performed(action)
+
+    def mouse_moved(self, x: int, y: int) -> None:
+        self._mouse_x = x
+        self._mouse_y = y
 
     def joystick_key_down(self, key_code) -> None:
         pass

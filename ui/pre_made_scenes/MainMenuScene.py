@@ -18,6 +18,7 @@ class MainMenuScene(Scene):
 
         self._selected_card_index: int = 0
         self._menu_components: List[Drawable] = []
+        self._scene_list = ('game-download', 'game-list')
 
     def create_elements(self) -> None:
         super().create_elements()
@@ -79,7 +80,7 @@ class MainMenuScene(Scene):
         elif action == InputAction.LEFT:
             self._set_card_selected_index(self._selected_card_index - 1)
         elif action == InputAction.ACTIVATE:
-            self._scene_loader.set_active_scene('game-list')
+            self._scene_loader.set_active_scene(self._scene_list[self._selected_card_index])
 
     def draw(self) -> None:
         self._window.fill(Color(255, 255, 255))

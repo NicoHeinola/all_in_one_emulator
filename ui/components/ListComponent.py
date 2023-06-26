@@ -12,7 +12,6 @@ class VerticalListItem(Drawable):
         self._index: int = 0
         self._is_selected: bool = False
         self._selected_color = Color(255, 255, 255)
-        self._color = Color(255, 255, 255)
         self._text: Text = Text(window, width, height, 0, 0)
         self._text.set_font_size(18)
         self._text.set_position_type(PositionType.VERTICAL_CENTER)
@@ -75,9 +74,6 @@ class VerticalListItem(Drawable):
     def set_selected_color(self, r: int, g: int, b: int, a: int = 255) -> None:
         self._selected_color = Color(r, g, b, a)
 
-    def set_color(self, r: int, g: int, b: int, a: int = 255) -> None:
-        self._color = Color(r, g, b, a)
-
     def draw(self) -> None:
         if not self._is_in_view:
             return
@@ -101,7 +97,6 @@ class ListComponent(Drawable):
 
     def __init__(self, window, width: float = 0, height: float = 0, x: int = 0, y: int = 0) -> None:
         super().__init__(window, width, height, x, y)
-        self._color = Color(255, 255, 255)
         self._selected_color = Color(255, 255, 255)
         self._border_radius: int = 0
 
@@ -192,7 +187,7 @@ class ListComponent(Drawable):
             item.set_selected_color(r, g, b, a)
 
     def set_color(self, r: int, g: int, b: int, a: int = 255) -> None:
-        self._color = Color(r, g, b, a)
+        super().set_color(r, g, b, a)
 
         for item in self._list_items:
             item.set_color(r, g, b, a)

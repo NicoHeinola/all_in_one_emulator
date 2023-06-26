@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import List
-from pygame import Surface
+from pygame import Color, Surface
 
 
 class PositionType(Enum):
@@ -32,6 +32,8 @@ class Drawable:
         self._padding_left: float = 0
         self._padding_right: float = 0
 
+        self._color: Color = Color(255, 255, 255)
+
         # Animations
         self._size_animation_speed: float = 1
         self._target_width: float = width
@@ -43,6 +45,12 @@ class Drawable:
         self._parent: Drawable = None
         self._components: List[Drawable] = []
         self._position_type: PositionType = PositionType.RELATIVE
+
+    def get_color(self) -> Color:
+        return self._color
+
+    def set_color(self, r: int, g: int, b: int, a: int = 255) -> None:
+        self._color = Color(r, g, b, a)
 
     def get_horizontal_padding(self) -> float:
         return self.get_padding_left() + self.get_padding_right()
@@ -179,7 +187,7 @@ class Drawable:
             x += self._parent.get_x() + self._parent.get_padding_left()
 
         if self._position_type == PositionType.ABSOLUTE:
-            x = self.get_x()
+            x = self._x
         elif self._position_type == PositionType.HORIZONTAL_CENTER or self._position_type == PositionType.CENTER:
             if self._parent is not None:
                 parent_x = self._parent.get_x()

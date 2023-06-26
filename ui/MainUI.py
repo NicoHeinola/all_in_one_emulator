@@ -7,7 +7,6 @@ from ui.pre_made_scenes.MainMenuScene import MainMenuScene
 from typing import List
 import pygame
 from ui.scenes.Scene import SceneLoader
-
 pygame.joystick.init()
 pygame.init()
 pygame.font.init()  # you have to call this at the start,
@@ -18,7 +17,7 @@ class MainUI(SceneLoader):
         super().__init__()
 
         # Window Information
-        self._window: pygame.Surface = pygame.display.set_mode((displayw, displayh), pygame.RESIZABLE | pygame.SRCALPHA)
+        self._window: pygame.Surface = pygame.display.set_mode((displayw, displayh), pygame.RESIZABLE | pygame.SRCALPHA | pygame.HWSURFACE | pygame.DOUBLEBUF)
 
         # Set title of screen
         pygame.display.set_caption("All In One Emulator")
@@ -46,7 +45,7 @@ class MainUI(SceneLoader):
         game_download_scene = GameDownloadScene(self._window, self)
         self.add_scene('game-download', game_download_scene)
 
-        self.set_active_scene('main-menu')
+        self.set_active_scene('game-download')
 
     def _reset_hold(self) -> None:
         self._hold_delay_count: int = 0
@@ -81,6 +80,17 @@ class MainUI(SceneLoader):
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     stopped = True
+                elif event.type == pygame.MOUSEMOTION:
+                    mouse_position = pygame.mouse.get_pos()
+                    scene.mouse_moved(mouse_position[0], mouse_position[1])
+                    # print(f"Mouse {mouse_position[0]} {mouse_position[1]}")
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    print(f"MOUSE BUTTON DOWN: {event.pos}, {event.button}")
+                    key_code = event.button
+                    if key_code in ConfigManager.get_actions_per_keycodes()['mouse']:
+                        action: str = ConfigManager.get_actions_per_keycodes()['mouse'][key_code]
+                        input_action: InputAction = InputAction[action.upper()]
+                        scene.mouse_action_performed(input_action)
                 elif event.type == pygame.KEYDOWN:
                     print("KEYDOWN:", event.key, pygame.key.name(event.key))
                     key_code = event.key
