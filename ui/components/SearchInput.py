@@ -34,6 +34,9 @@ class SearchInput(Drawable):
         self._show_cursor: bool = False
         self._focused: bool = False
 
+    def is_focused(self) -> bool:
+        return self._focused
+
     def set_focus(self, focus: bool) -> None:
         if self._focused == focus:
             return
@@ -42,14 +45,18 @@ class SearchInput(Drawable):
         self._show_cursor = focus
         self._blink_counter = 0
 
+    def get_text_input(self) -> str:
+        return self._text.get_text()
+
     def set_text_input(self, text: str) -> None:
         self._text.set_text(text)
         self._text.render_text()
+        self.recalculate_position()
 
     def recalculate_x(self) -> None:
         super().recalculate_x()
 
-        self._text_cursor.set_x(self._text.get_width())
+        self._text_cursor.set_x(self._text.get_width() - 4)
         self._text_cursor.recalculate_x()
 
     def set_placeholder_text_input(self, text: str) -> None:

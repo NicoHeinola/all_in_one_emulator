@@ -6,7 +6,7 @@ from ui.components.Image import Image
 from ui.components.Drawable import PositionType
 from ui.components.Drawable import Drawable
 from ui.components.CardItem import CardItem
-from ui.scenes.Scene import Scene, SceneLoader
+from ui.scenes.Scene import ActionFrom, Scene, SceneLoader
 import pygame
 from pygame import Color, Surface
 from helpers.ConfigManager import ConfigManager
@@ -72,8 +72,8 @@ class MainMenuScene(Scene):
         to_component.set_animated_width(350)
         to_component.set_animated_height(450)
 
-    def action_performed(self, action: InputAction):
-        super().action_performed(action)
+    def action_performed(self, action: InputAction, action_from: ActionFrom):
+        super().action_performed(action, action_from)
 
         if action == InputAction.RIGHT:
             self._set_card_selected_index(self._selected_card_index + 1)

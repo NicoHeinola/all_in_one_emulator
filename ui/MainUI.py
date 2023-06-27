@@ -6,7 +6,7 @@ from ui.pre_made_scenes.GameListScene import GameListScene
 from ui.pre_made_scenes.MainMenuScene import MainMenuScene
 from typing import List
 import pygame
-from ui.scenes.Scene import SceneLoader
+from ui.scenes.Scene import ActionFrom, SceneLoader
 pygame.joystick.init()
 pygame.init()
 pygame.font.init()  # you have to call this at the start,
@@ -51,6 +51,7 @@ class MainUI(SceneLoader):
         self._hold_delay_count: int = 0
         self._delay_until_hold_count: int = 0
         self._hold_action: InputAction = None
+        self._hold_action_from: ActionFrom = None
 
     def run(self):
         # Put all variables up here
@@ -74,7 +75,7 @@ class MainUI(SceneLoader):
                 else:
                     self._hold_delay_count = 0
                     print("Performing!", self._hold_action)
-                    scene.action_performed(self._hold_action)
+                    scene.action_performed(self._hold_action, self._hold_action_from)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -92,21 +93,27 @@ class MainUI(SceneLoader):
                         input_action: InputAction = InputAction[action.upper()]
                         scene.mouse_action_performed(input_action)
                 elif event.type == pygame.KEYDOWN:
-                    print("KEYDOWN:", event.key, pygame.key.name(event.key))
+                    print("KEYDOWN:", event.key, pygame.key.name(event.key), event.unicode)
                     key_code = event.key
+                    scene.keyboard_key_down(key_code, event.unicode)
                     if key_code in ConfigManager.get_actions_per_keycodes()['keyboard']:
                         action: str = ConfigManager.get_actions_per_keycodes()['keyboard'][key_code]
                         input_action: InputAction = InputAction[action.upper()]
                         self._hold_action = input_action
-                        scene.action_performed(input_action)
+                        self._hold_action_from = ActionFrom.KEYBOARD
+                        scene.action_performed(input_action, ActionFrom.KEYBOARD)
                 elif event.type == pygame.KEYUP:
                     self._reset_hold()
                 elif event.type == pygame.JOYBUTTONDOWN:
+                    print("JOYSTICK BUTTON DOWN:", key_code)
                     key_code = event.button
+                    scene.joystick_key_down(key_code)
                     if key_code in ConfigManager.get_actions_per_keycodes()['controller']:
                         action: str = ConfigManager.get_actions_per_keycodes()['controller'][key_code]
-                        scene.action_performed(InputAction[action.upper()])
-                    print("JOYSTICK BUTTON DOWN:", key_code)
+                        input_action: InputAction = InputAction[action.upper()]
+                        self._hold_action = input_action
+                        self._hold_action_from = ActionFrom.CONTROLLER
+                        scene.action_performed(input_action, ActionFrom.CONTROLLER)
                 elif event.type == pygame.JOYBUTTONUP:
                     self._reset_hold()
                 elif event.type == pygame.WINDOWRESIZED:

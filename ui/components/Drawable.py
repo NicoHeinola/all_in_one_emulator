@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List
 from pygame import Color, Surface
+import pygame
 
 
 class PositionType(Enum):
@@ -45,6 +46,10 @@ class Drawable:
         self._parent: Drawable = None
         self._components: List[Drawable] = []
         self._position_type: PositionType = PositionType.RELATIVE
+
+    def collidepoint(self, x: int, y: int) -> bool:
+        my_rect = pygame.rect.Rect(self.get_x(), self.get_y(), self.get_width(), self.get_height())
+        return my_rect.collidepoint(x, y)
 
     def get_color(self) -> Color:
         return self._color

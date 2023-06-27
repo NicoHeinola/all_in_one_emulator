@@ -1,5 +1,6 @@
 from typing import List
 from pygame import Color, Surface
+import pygame
 from helpers.RomManager import Rom, RomManager
 from ui.InputActions import InputAction
 from ui.components.Circle import Circle
@@ -8,7 +9,7 @@ from ui.components.Frame import ForceHorizontalLayout, Frame
 from ui.components.Image import Image
 from ui.components.ListComponent import ListComponent
 from ui.components.SearchInput import SearchInput
-from ui.scenes.Scene import Scene
+from ui.scenes.Scene import ActionFrom, Scene
 
 
 class GameDownloadScene(Scene):
@@ -90,16 +91,36 @@ class GameDownloadScene(Scene):
         rom.make_top_most()
         rom.make_full_screen()
 
-    def action_performed(self, action: InputAction):
-        super().action_performed(action)
+    def keyboard_key_down(self, key_code, unicode) -> None:
+        super().keyboard_key_down(key_code, unicode)
+
+        if self._search_input.is_focused():
+            current_text = self._search_input.get_text_input()
+            if key_code == 8:  # Backspace
+                self._search_input.set_text_input(current_text[:len(current_text) - 1])
+            else:
+                self._search_input.set_text_input(current_text + unicode)
+
+    def action_performed(self, action: InputAction, action_from: ActionFrom):
+        super().action_performed(action, action_from)
+
+        # If user is typing
+        if self._search_input.is_focused():
+            if action_from == ActionFrom.MOUSE and action == InputAction.ACTIVATE and not self._search_input.collidepoint(self._mouse_x, self._mouse_y):
+                self._search_input.set_focus(False)
+            return
 
         if action == InputAction.DOWN:
             self._game_list.set_selected_index(self._game_list.get_selected_index() + 1)
         elif action == InputAction.UP:
             self._game_list.set_selected_index(self._game_list.get_selected_index() - 1)
         elif action == InputAction.ACTIVATE:
+            if self._search_input.collidepoint(self._mouse_x, self._mouse_y):
+                self._search_input.set_focus(True)
+            else:
+                self._search_input.set_focus(False)
+
             self._game_list.call_list_item_function()
-            self._search_input.set_focus(True)
         elif action == InputAction.BACK:
             self._scene_loader.set_active_scene("main-menu")
 

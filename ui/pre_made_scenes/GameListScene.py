@@ -5,7 +5,7 @@ from ui.InputActions import InputAction
 from ui.components.Drawable import PositionType
 from ui.components.Frame import ForceHorizontalLayout, Frame
 from ui.components.ListComponent import ListComponent
-from ui.scenes.Scene import Scene
+from ui.scenes.Scene import ActionFrom, Scene
 
 
 class GameListScene(Scene):
@@ -50,8 +50,8 @@ class GameListScene(Scene):
         rom.make_top_most()
         rom.make_full_screen()
 
-    def action_performed(self, action: InputAction):
-        super().action_performed(action)
+    def action_performed(self, action: InputAction, action_from: ActionFrom):
+        super().action_performed(action, action_from)
 
         if action == InputAction.DOWN:
             self._game_list.set_selected_index(self._game_list.get_selected_index() + 1)

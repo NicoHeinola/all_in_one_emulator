@@ -1,8 +1,15 @@
+from enum import Enum
 from typing import Dict, List
 
 from pygame import Surface
 from ui.InputActions import InputAction
 from ui.components.Drawable import Drawable
+
+
+class ActionFrom(Enum):
+    KEYBOARD = 0
+    CONTROLLER = 1
+    MOUSE = 2
 
 
 class Scene:
@@ -23,11 +30,11 @@ class Scene:
     def _empty_elements(self) -> None:
         self._elements = []
 
-    def action_performed(self, action: InputAction):
+    def action_performed(self, action: InputAction, action_from: ActionFrom):
         pass
 
     def mouse_action_performed(self, action: InputAction) -> None:
-        self.action_performed(action)
+        self.action_performed(action, ActionFrom.MOUSE)
 
     def mouse_moved(self, x: int, y: int) -> None:
         self._mouse_x = x
@@ -36,7 +43,7 @@ class Scene:
     def joystick_key_down(self, key_code) -> None:
         pass
 
-    def keyboard_key_down(self, key_code) -> None:
+    def keyboard_key_down(self, key_code, unicode) -> None:
         pass
 
     def draw(self) -> None:
