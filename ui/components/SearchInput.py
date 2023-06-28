@@ -71,8 +71,8 @@ class SearchInput(Drawable):
             self._placeholder_text.draw()
         else:
             self._text.draw()
-            if self._show_cursor:
-                self._text_cursor.draw()
+        if self._show_cursor:
+            self._text_cursor.draw()
         # super().draw()
 
     def update(self) -> None:

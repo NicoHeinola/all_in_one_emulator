@@ -110,6 +110,14 @@ class ListComponent(Drawable):
 
         self._recalculate_max_index()
 
+    def empty_list_items(self) -> None:
+        for item in self._list_items:
+            self.remove_component(item)
+        self._list_items = []
+        self._list_item_functions = []
+        self._selected_item_index = 0
+        self._recalculate_max_index()
+
     def add_list_item(self, text: str, function) -> None:
         index = len(self._list_items)
         item = VerticalListItem(self._window, self.get_width() - self.get_padding_left() - self.get_padding_right(), self._list_item_height)
@@ -128,6 +136,8 @@ class ListComponent(Drawable):
         return self._list_item_height
 
     def call_list_item_function(self, list_item_index: int = None) -> None:
+        if len(self._list_items) == 0:
+            return
         if list_item_index is None:
             list_item_index = self.get_selected_index()
         function = self._list_item_functions[list_item_index]

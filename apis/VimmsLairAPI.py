@@ -26,11 +26,18 @@ class VimmsLairEmulator(Enum):
 
 class VimmsLairRom:
     def __init__(self, name: str, id: str, region: VimmsLairRegion, emulator: VimmsLairEmulator) -> None:
-        self._name = name
-        self._id = id  # Vault id
-        self._region = region
-        self._emulator = emulator
+        self._name: str = name
+        self._file_safe_name: str = re.sub(r'[^\w\d-]', '_', name)
+        self._id: str = id  # Vault id
+        self._region: VimmsLairRegion = region
+        self._emulator: VimmsLairEmulator = emulator
         self._media_id: str = None
+
+    def get_name(self) -> str:
+        return self._name
+
+    def get_file_safe_name(self) -> str:
+        return self._file_safe_name
 
     def _find_media_id(self) -> str:
         if self._media_id is not None:
@@ -64,7 +71,7 @@ class VimmsLairRom:
         r = requests.get(full_url, headers=headers)
 
         ext = r.headers['content-type'].split('/')[-1]
-        output_file = self._name + "." + ext
+        output_file = self.get_file_safe_name() + "." + ext
         print(r.headers['content-type'])
         output_path = os.path.join(output_folder, output_file)
         with open(output_path, 'wb+') as f:
@@ -120,10 +127,9 @@ class VimmsLairSearchAPI:
             td_elements = rom_element.find_all('td')
 
             link = td_elements[headers['title']].find('a', href=True)
-            name = re.sub(r'[^\w\d-]', '_', link.text)
             id = link['href'].split("/")[2]
 
-            rom = VimmsLairRom(name, id, region, emulator)
+            rom = VimmsLairRom(link.text, id, region, emulator)
             roms.append(rom)
         return roms
 

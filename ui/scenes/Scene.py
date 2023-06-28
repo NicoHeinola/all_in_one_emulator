@@ -33,7 +33,7 @@ class Scene:
     def action_performed(self, action: InputAction, action_from: ActionFrom):
         pass
 
-    def mouse_action_performed(self, action: InputAction) -> None:
+    def mouse_action_performed(self, action: InputAction, x: int, y: int) -> None:
         self.action_performed(action, ActionFrom.MOUSE)
 
     def mouse_moved(self, x: int, y: int) -> None:

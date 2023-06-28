@@ -34,6 +34,15 @@ class Drawable:
         self._padding_right: float = 0
 
         self._color: Color = Color(255, 255, 255)
+        self._hover_color: Color = Color(244, 244, 244)
+        self._is_hovered: bool = False
+
+        self._border_radius_top_left: int = 15
+        self._border_radius_top_right: int = 15
+        self._border_radius_bottom_left: int = 15
+        self._border_radius_bottom_right: int = 15
+
+        self._visible: bool = True
 
         # Animations
         self._size_animation_speed: float = 1
@@ -51,11 +60,80 @@ class Drawable:
         my_rect = pygame.rect.Rect(self.get_x(), self.get_y(), self.get_width(), self.get_height())
         return my_rect.collidepoint(x, y)
 
+    def set_visible(self, visible: bool) -> None:
+        self._visible = visible
+
+    def is_visible(self) -> bool:
+        return self._visible
+
+    def _check_hover(self, x: int, y: int) -> None:
+        if self.collidepoint(x, y):
+            self.set_is_hovered(True)
+        else:
+            self.set_is_hovered(False)
+
+    def on_mouse_move(self, x: int, y: int) -> None:
+        self._check_hover(x, y)
+        self.on_mouse_move_children(x, y)
+
+    def on_click(self, x: int, y: int) -> None:
+        self.on_click_children(x, y)
+
+    def on_click_children(self, x: int, y: int) -> None:
+        for component in self._components:
+            component.on_click(x, y)
+
+    def on_mouse_move_children(self, x: int, y: int) -> None:
+        for component in self._components:
+            component.on_mouse_move(x, y)
+
+    def set_is_hovered(self, is_hovered: bool) -> None:
+        self._is_hovered = is_hovered
+
+    def is_hovered(self) -> bool:
+        return self._is_hovered
+
+    def set_border_radius_top_left(self, radius: int) -> None:
+        self._border_radius_top_left = radius
+
+    def set_border_radius_top_right(self, radius: int) -> None:
+        self._border_radius_top_right = radius
+
+    def set_border_radius_bottom_left(self, radius: int) -> None:
+        self._border_radius_bottom_left = radius
+
+    def set_border_radius_bottom_right(self, radius: int) -> None:
+        self._border_radius_bottom_right = radius
+
+    def get_border_radius_top_left(self) -> None:
+        return self._border_radius_top_left
+
+    def get_border_radius_top_right(self) -> None:
+        return self._border_radius_top_right
+
+    def get_border_radius_bottom_left(self) -> None:
+        return self._border_radius_bottom_left
+
+    def get_border_radius_bottom_right(self) -> None:
+        return self._border_radius_bottom_right
+
+    def get_current_color(self) -> Color:
+        if self.is_hovered():
+            return self.get_hover_color()
+        else:
+            return self.get_color()
+
     def get_color(self) -> Color:
         return self._color
 
     def set_color(self, r: int, g: int, b: int, a: int = 255) -> None:
         self._color = Color(r, g, b, a)
+
+    def get_hover_color(self) -> Color:
+        return self._hover_color
+
+    def set_hover_color(self, r: int, g: int, b: int, a: int = 255) -> None:
+        self._hover_color = Color(r, g, b, a)
 
     def get_horizontal_padding(self) -> float:
         return self.get_padding_left() + self.get_padding_right()

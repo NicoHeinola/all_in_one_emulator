@@ -91,7 +91,7 @@ class MainUI(SceneLoader):
                     if key_code in ConfigManager.get_actions_per_keycodes()['mouse']:
                         action: str = ConfigManager.get_actions_per_keycodes()['mouse'][key_code]
                         input_action: InputAction = InputAction[action.upper()]
-                        scene.mouse_action_performed(input_action)
+                        scene.mouse_action_performed(input_action, event.pos[0], event.pos[1])
                 elif event.type == pygame.KEYDOWN:
                     print("KEYDOWN:", event.key, pygame.key.name(event.key), event.unicode)
                     key_code = event.key
